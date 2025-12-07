@@ -11,13 +11,19 @@ function App() {
   const equipePokemons = pokemons.filter(p => p.selecionado);
   const boxPokemons = pokemons.filter(p => !p.selecionado);
 
-  function moverPokemon(instanceId: number) {
-    console.log('Movendo pokémon com instanceId:', instanceId);
+  function moverPokemon(instanceId: number, destino: 'equipe' | 'box') {
+    // Validação: impede adicionar mais de 6 pokémons na equipe
+    if (destino === 'equipe' && equipePokemons.length >= 6) {
+      alert('Equipe cheia! Máximo de 6 Pokémons na equipe.');
+      return;
+    }
+    
+    console.log(`Movendo pokémon ${instanceId} para ${destino}`);
     setPokemons(pokemonsAtuais => 
-      pokemonsAtuais.map(pokemon => 
-        pokemon.instanceId === instanceId 
-          ? { ...pokemon, selecionado: !pokemon.selecionado }
-          : pokemon
+      pokemonsAtuais.map(p => 
+        p.instanceId === instanceId 
+          ? { ...p, selecionado: destino === 'equipe' }
+          : p
       )
     );
   }
