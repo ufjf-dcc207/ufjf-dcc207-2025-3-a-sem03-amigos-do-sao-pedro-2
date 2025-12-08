@@ -53,7 +53,7 @@ export const todosPokemons: Pokemon[] = [
     vantagens: ['Água', 'Voador'],
   },
   {
-    id: 7, instanceId: 4, nome: 'Squirtle', numero: '#007', selecionado: true,
+    id: 7, instanceId: 4, nome: 'Squirtle', numero: '#007', selecionado: false,
     imagemUrl: 'https://img.pokemondb.net/sprites/black-white/anim/normal/squirtle.gif',
     tipos: ['Água'],
     estatisticas: [ 
@@ -162,7 +162,7 @@ export const todosPokemons: Pokemon[] = [
 
   // Jigglypuff (modelo original)
   {
-    id: 39, instanceId: 13, nome: 'Jigglypuff', numero: '#039', selecionado: true,
+    id: 39, instanceId: 13, nome: 'Jigglypuff', numero: '#039', selecionado: false,
     imagemUrl: 'https://img.pokemondb.net/sprites/black-white/anim/normal/jigglypuff.gif',
     tipos: ['Normal', 'Fada'],
     estatisticas: [
@@ -256,7 +256,7 @@ export const todosPokemons: Pokemon[] = [
     vantagens: ['Fogo', 'Água', 'Terra'],
   },
   {
-    id: 7, instanceId: 20, nome: 'Squirtle', numero: '#007', selecionado: false,
+    id: 7, instanceId: 30, nome: 'Squirtle', numero: '#007', selecionado: false,
     imagemUrl: 'https://img.pokemondb.net/sprites/black-white/anim/normal/squirtle.gif',
     tipos: ['Água'],
     estatisticas: [ 
@@ -333,7 +333,7 @@ export const todosPokemons: Pokemon[] = [
     vantagens: ['Fogo', 'Terra', 'Pedra'],
   },
   {
-    id: 344, instanceId: 27, nome: 'Clamperl', numero: '#344', selecionado: true,
+    id: 344, instanceId: 27, nome: 'Clamperl', numero: '#344', selecionado: false,
     imagemUrl: 'https://img.pokemondb.net/sprites/black-white/anim/normal/clamperl.gif',
     tipos: ['Água'],
     estatisticas: [
@@ -344,7 +344,7 @@ export const todosPokemons: Pokemon[] = [
     vantagens: ['Fogo', 'Terra', 'Pedra'],
   },
   {
-    id: 176, instanceId: 28, nome: 'Togetic', numero: '#176', selecionado: true,
+    id: 176, instanceId: 28, nome: 'Togetic', numero: '#176', selecionado: false,
     imagemUrl: 'https://img.pokemondb.net/sprites/black-white/anim/normal/togetic.gif',
     tipos: ['Fada', 'Voador'],
     estatisticas: [
