@@ -42,13 +42,21 @@
 
 .pc {
   background-color: #3a3a3a;
-  align-items: stretch;
   border-right: 2px solid #111;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 10px;
+  align-content: start;
+  padding: 15px;
 }
 
 .time {
   background-color: #f4f4f4;
   color: #000;
-  justify-content: flex-start;
-  align-items: center;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 20px;
+  padding: 20px;
+  align-content: start;
 }

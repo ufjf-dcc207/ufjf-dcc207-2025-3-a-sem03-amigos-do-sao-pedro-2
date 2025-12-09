@@ -159,21 +159,26 @@ function App() {
       </DashboardColumn>
 
       <DashboardColumn titulo="Equipe Atual" gridType="time" onMoverPokemon={moverPokemon}>
-        {equipePokemons.map(pokemon => (
-          <TeamPokemonCard 
-            key={pokemon.instanceId} 
-            id={pokemon.id}
-            instanceId={pokemon.instanceId}
-            imagemUrl={pokemon.imagemUrl}
-            nome={pokemon.nome}
-            numero={pokemon.numero}
-            tipos={pokemon.tipos}
-            estatisticas={pokemon.estatisticas}
-            vantagens={pokemon.vantagens}
-            fraquezas={pokemon.fraquezas}
-            selecionado={pokemon.selecionado}
-          />
-        ))}
+        {Array.from({ length: 6 }).map((_, index) => {
+          const pokemon = equipePokemons[index];
+          return pokemon ? (
+            <TeamPokemonCard 
+              key={pokemon.instanceId} 
+              id={pokemon.id}
+              instanceId={pokemon.instanceId}
+              imagemUrl={pokemon.imagemUrl}
+              nome={pokemon.nome}
+              numero={pokemon.numero}
+              tipos={pokemon.tipos}
+              estatisticas={pokemon.estatisticas}
+              vantagens={pokemon.vantagens}
+              fraquezas={pokemon.fraquezas}
+              selecionado={pokemon.selecionado}
+            />
+          ) : (
+            <div key={`empty-${index}`} className="empty-slot"></div>
+          );
+        })}
       </DashboardColumn>
 
     </div>
