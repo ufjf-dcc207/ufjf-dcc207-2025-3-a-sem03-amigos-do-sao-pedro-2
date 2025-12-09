@@ -42,7 +42,7 @@ export const todosPokemons: Pokemon[] = [
     vantagens: ['Fogo', 'Terra', 'Pedra'],
   },
  {
-    id: 25, instanceId: 3, nome: 'Pikachu', numero: '#025', selecionado: true,
+    id: 25, instanceId: 3, nome: 'Pikachu', numero: '#025', selecionado: false,
     imagemUrl: 'https://img.pokemondb.net/sprites/black-white/anim/normal/pikachu.gif',
     tipos: ['Elétrico'],
     estatisticas: [

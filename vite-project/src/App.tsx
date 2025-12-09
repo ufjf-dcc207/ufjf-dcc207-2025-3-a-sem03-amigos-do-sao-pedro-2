@@ -104,7 +104,18 @@ function App() {
     setFilterBusca('');
   }
 
-  function moverPokemon(instanceId: number, destino: 'equipe' | 'box') {
+  function moverPokemon(instanceId: number, destino: 'equipe' | 'box', origem: 'team' | 'box') {
+    if (origem === "team" && destino === "box") {
+      setPokemons(pokemonsAtuais =>
+        pokemonsAtuais.map(p =>
+         p.instanceId === instanceId
+          ? { ...p, selecionado: false } 
+          : p
+        )
+      );
+      return;
+    }
+    
     if (destino === 'equipe' && equipePokemons.length >= 6) {
       alert('Equipe cheia! Máximo de 6 Pokémons na equipe.');
       return;

@@ -8,7 +8,9 @@ interface PCIconProps {
 
 export function PCPokemonIcon({ instanceId, imagemUrl, nome }: PCIconProps) {
   function handleDragStart(e: React.DragEvent) {
-    e.dataTransfer.setData('text/plain', instanceId.toString());
+    e.dataTransfer.setData('instanceId', String(instanceId));
+    e.dataTransfer.setData('text/plain', String(instanceId)); 
+    e.dataTransfer.setData('from', 'box');
   }
 
   return (

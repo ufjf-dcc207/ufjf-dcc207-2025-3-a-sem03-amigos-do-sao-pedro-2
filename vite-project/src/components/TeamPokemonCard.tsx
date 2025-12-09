@@ -5,14 +5,23 @@ import './TeamPokemonCard.css';
 
 export function TeamPokemonCard(props: Pokemon) {
   return (
-    <div className="team-card">
-        <div className="team-card-header">
-          <img src={props.imagemUrl} alt={props.nome} />
-          <h3>{props.numero} {props.nome}</h3>
-          <div className="tipos-container">
-              {props.tipos.map(t => <TypeBadge key={t} tipo={t} />)}
+    <div 
+      className="team-card" 
+      draggable 
+      onDragStart={(e) => { 
+        e.dataTransfer.setData('instanceId', String(props.instanceId));
+        e.dataTransfer.setData('text/plain', String(props.instanceId)); 
+        e.dataTransfer.setData('pokemon', JSON.stringify(props));
+        e.dataTransfer.setData('from', 'team');
+      }} 
+    >
+            <div className="team-card-header">
+            <img src={props.imagemUrl} alt={props.nome} />
+            <h3>{props.numero} {props.nome}</h3>
+            <div className="tipos-container">
+                {props.tipos.map(t => <TypeBadge key={t} tipo={t} />)}
+            </div>
           </div>
-        </div>
 
         <div className="team-card-body">
             <div className="card-secao">
