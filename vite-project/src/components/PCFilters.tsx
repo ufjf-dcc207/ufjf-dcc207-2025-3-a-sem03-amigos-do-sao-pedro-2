@@ -1,94 +1,59 @@
 import type { PokemonType } from '../pokedexData';
+import type { FiltersState, FiltersAction } from '../reducers/reducerTypes';
 import './PCFilters.css';
 
 interface PCFiltersProps {
-  filterType: string;
-  setFilterType: (tipo: string) => void;
-
-  filterMinHP: number;
-  setFilterMinHP: (valor: number) => void;
-
-  filterMinATK: number;
-  setFilterMinATK: (valor: number) => void;
-
-  filterMinDEF: number;
-  setFilterMinDEF: (valor: number) => void;
-
-  filterMinSpATK: number;
-  setFilterMinSpATK: (valor: number) => void;
-
-  filterMinSpDEF: number;
-  setFilterMinSpDEF: (valor: number) => void;
-
-  filterMinSpeed: number;
-  setFilterMinSpeed: (valor: number) => void;
-  
-  filterVantagem: string;
-  setFilterVantagem: (tipo: string) => void;
-
-  filterFraqueza: string;
-  setFilterFraqueza: (tipo: string) => void;
-
-  filterBusca: string;
-  setFilterBusca: (texto: string) => void;
-  
+  filtersState: FiltersState;
+  dispatch: React.Dispatch<FiltersAction>;
   limparFiltros: () => void;
 }
 
 export function PCFilters({
-  filterType,
-  setFilterType,
-  filterMinHP,
-  setFilterMinHP,
-  filterMinATK,
-  setFilterMinATK,
-  filterMinDEF,
-  setFilterMinDEF,
-  filterMinSpATK,
-  setFilterMinSpATK,
-  filterMinSpDEF,
-  setFilterMinSpDEF,
-  filterMinSpeed,
-  setFilterMinSpeed,
-  filterVantagem,
-  setFilterVantagem,
-  filterFraqueza,
-  setFilterFraqueza,
-  filterBusca,
-  setFilterBusca,
+  filtersState,
+  dispatch,
   limparFiltros
 }: PCFiltersProps) {
-  
+
   const tiposDisponiveis: PokemonType[] = [
-    'Grama', 'Venenoso', 'Fogo', 'Água', 'Elétrico', 'Inseto', 
-    'Terra', 'Pedra', 'Gelo', 'Voador', 'Psíquico', 'Normal', 
+    'Grama', 'Venenoso', 'Fogo', 'Água', 'Elétrico', 'Inseto',
+    'Terra', 'Pedra', 'Gelo', 'Voador', 'Psíquico', 'Normal',
     'Dragão', 'Fada', 'Lutador', 'Fantasma'
   ];
 
   return (
     <div className="pc-filters">
       <h3 className="filters-title">Filtros</h3>
-      
+
       <div className="filters-container">
 
         <div className="filter-group">
           <label htmlFor="filter-busca">Buscar:</label>
-          <input 
+          <input
             id="filter-busca"
-            type="text" 
+            type="text"
             placeholder="Nome ou número..."
-            value={filterBusca}
-            onChange={(e) => setFilterBusca(e.target.value)}
+            value={filtersState.filterBusca}
+            onChange={(e) =>
+              dispatch({
+                type: 'SET_FILTER_BUSCA',
+                payload: e.target.value
+              })
+            }
             className="filter-input"
           />
         </div>
 
         <div className="filter-group">
           <label htmlFor="filter-type">Tipo:</label>
-          <select 
+          <select
             id="filter-type"
-            value={filterType} 
-            onChange={(e) => setFilterType(e.target.value)}
+            value={filtersState.filterType}
+            onChange={(e) =>
+              dispatch({
+                type: 'SET_FILTER_TYPE',
+                payload: e.target.value
+              })
+            }
             className="filter-select"
           >
             <option value="">Todos</option>
@@ -99,89 +64,117 @@ export function PCFilters({
         </div>
 
         <div className="filter-group">
-          <label htmlFor="filter-hp">HP mínimo:</label>
-          <input 
-            id="filter-hp"
-            type="number" 
-            min="0" 
+          <label>HP mínimo:</label>
+          <input
+            type="number"
+            min="0"
             max="200"
-            value={filterMinHP}
-            onChange={(e) => setFilterMinHP(Number(e.target.value))}
+            value={filtersState.filterMinHP}
+            onChange={(e) =>
+              dispatch({
+                type: 'SET_FILTER_MIN_HP',
+                payload: Number(e.target.value)
+              })
+            }
             className="filter-input"
           />
         </div>
 
         <div className="filter-group">
-          <label htmlFor="filter-atk">ATK mínimo:</label>
-          <input 
-            id="filter-atk"
-            type="number" 
-            min="0" 
+          <label>ATK mínimo:</label>
+          <input
+            type="number"
+            min="0"
             max="200"
-            value={filterMinATK}
-            onChange={(e) => setFilterMinATK(Number(e.target.value))}
+            value={filtersState.filterMinATK}
+            onChange={(e) =>
+              dispatch({
+                type: 'SET_FILTER_MIN_ATK',
+                payload: Number(e.target.value)
+              })
+            }
             className="filter-input"
           />
         </div>
 
         <div className="filter-group">
-          <label htmlFor="filter-def">DEF mínimo:</label>
-          <input 
-            id="filter-def"
-            type="number" 
-            min="0" 
+          <label>DEF mínimo:</label>
+          <input
+            type="number"
+            min="0"
             max="200"
-            value={filterMinDEF}
-            onChange={(e) => setFilterMinDEF(Number(e.target.value))}
+            value={filtersState.filterMinDEF}
+            onChange={(e) =>
+              dispatch({
+                type: 'SET_FILTER_MIN_DEF',
+                payload: Number(e.target.value)
+              })
+            }
             className="filter-input"
           />
         </div>
 
         <div className="filter-group">
-          <label htmlFor="filter-spatk">Sp.ATK mínimo:</label>
-          <input 
-            id="filter-spatk"
-            type="number" 
-            min="0" 
+          <label>Sp.ATK mínimo:</label>
+          <input
+            type="number"
+            min="0"
             max="200"
-            value={filterMinSpATK}
-            onChange={(e) => setFilterMinSpATK(Number(e.target.value))}
+            value={filtersState.filterMinSpATK}
+            onChange={(e) =>
+              dispatch({
+                type: 'SET_FILTER_MIN_SPATK',
+                payload: Number(e.target.value)
+              })
+            }
             className="filter-input"
           />
         </div>
 
         <div className="filter-group">
-          <label htmlFor="filter-spdef">Sp.DEF mínimo:</label>
-          <input 
-            id="filter-spdef"
-            type="number" 
-            min="0" 
+          <label>Sp.DEF mínimo:</label>
+          <input
+            type="number"
+            min="0"
             max="200"
-            value={filterMinSpDEF}
-            onChange={(e) => setFilterMinSpDEF(Number(e.target.value))}
+            value={filtersState.filterMinSpDEF}
+            onChange={(e) =>
+              dispatch({
+                type: 'SET_FILTER_MIN_SPDEF',
+                payload: Number(e.target.value)
+              })
+            }
             className="filter-input"
           />
         </div>
 
         <div className="filter-group">
-          <label htmlFor="filter-speed">SPEED mínimo:</label>
-          <input 
-            id="filter-speed"
-            type="number" 
-            min="0" 
+          <label>SPEED mínimo:</label>
+          <input
+            type="number"
+            min="0"
             max="200"
-            value={filterMinSpeed}
-            onChange={(e) => setFilterMinSpeed(Number(e.target.value))}
+            value={filtersState.filterMinSpeed}
+            onChange={(e) =>
+              dispatch({
+                type: 'SET_FILTER_MIN_SPEED',
+                payload: Number(e.target.value)
+              })
+            }
             className="filter-input"
           />
         </div>
 
         <div className="filter-group">
-          <label htmlFor="filter-vantagem">Vantagem contra:</label>
-          <select 
-            id="filter-vantagem"
-            value={filterVantagem} 
-            onChange={(e) => setFilterVantagem(e.target.value)}
+          <label>Vantagem contra:</label>
+          <select
+            value={filtersState.filterVantagem}
+            onChange={(e) =>
+              dispatch({
+                type: 'SET_FILTER_VANTAGEM',
+                payload: e.target.value
+              })
+            }
             className="filter-select"
           >
             <option value="">Nenhum</option>
@@ -192,11 +185,15 @@ export function PCFilters({
         </div>
 
         <div className="filter-group">
-          <label htmlFor="filter-fraqueza">Fraco contra:</label>
-          <select 
-            id="filter-fraqueza"
-            value={filterFraqueza} 
-            onChange={(e) => setFilterFraqueza(e.target.value)}
+          <label>Fraco contra:</label>
+          <select
+            value={filtersState.filterFraqueza}
+            onChange={(e) =>
+              dispatch({
+                type: 'SET_FILTER_FRAQUEZA',
+                payload: e.target.value
+              })
+            }
             className="filter-select"
           >
             <option value="">Nenhum</option>
@@ -206,7 +203,7 @@ export function PCFilters({
           </select>
         </div>
 
-        <button 
+        <button
           onClick={limparFiltros}
           className="clear-filters-button"
         >
