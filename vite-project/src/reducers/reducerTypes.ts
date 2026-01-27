@@ -26,7 +26,25 @@ export type FiltersAction =
   | { type: 'SET_FILTER_BUSCA'; payload: string }
   | { type: 'CLEAR_FILTERS' };
 
+// Estado dos Pokémons com loading e error
+export interface PokemonsState {
+  pokemons: Pokemon[];
+  loading: boolean;
+  error: string | null;
+}
+
 export type PokemonsAction =
   | { type: 'MOVE_POKEMON'; payload: { instanceId: number; selecionado: boolean } }
-  | { type: 'SET_ALL'; payload: Pokemon[] };
+  | { type: 'SET_ALL'; payload: Pokemon[] }
+  | { type: 'SET_LOADING'; payload: boolean }
+  | { type: 'SET_ERROR'; payload: string | null }
+  | { type: 'LOAD_POKEMONS_SUCCESS'; payload: Pokemon[] }
+  | { type: 'LOAD_POKEMONS_ERROR'; payload: string };
+
+// Estado inicial para Pokémons
+export const initialPokemonsState: PokemonsState = {
+  pokemons: [],
+  loading: false,
+  error: null,
+};
 
