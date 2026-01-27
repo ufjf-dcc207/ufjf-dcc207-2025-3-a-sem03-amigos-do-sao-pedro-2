@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import type { PokemonType } from '../pokedexData';
 import type { FiltersState, FiltersAction } from '../reducers/reducerTypes';
 import './PCFilters.css';
@@ -15,10 +15,22 @@ export function PCFilters({
   limparFiltros
 }: PCFiltersProps) {
   const inputBuscaRef = useRef<HTMLInputElement>(null);
+  const [buscaLocal, setBuscaLocal] = useState(filtersState.filterBusca);
 
   useEffect(() => {
     inputBuscaRef.current?.focus();
   }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      dispatch({
+        type: 'SET_FILTER_BUSCA',
+        payload: buscaLocal
+      });
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [buscaLocal, dispatch]);
 
   const tiposDisponiveis: PokemonType[] = [
     'Grama', 'Venenoso', 'Fogo', 'Água', 'Elétrico', 'Inseto',
@@ -39,13 +51,8 @@ export function PCFilters({
             id="filter-busca"
             type="text"
             placeholder="Nome ou número..."
-            value={filtersState.filterBusca}
-            onChange={(e) =>
-              dispatch({
-                type: 'SET_FILTER_BUSCA',
-                payload: e.target.value
-              })
-            }
+            value={buscaLocal}
+            onChange={(e) => setBuscaLocal(e.target.value)}
             className="filter-input"
           />
         </div>
