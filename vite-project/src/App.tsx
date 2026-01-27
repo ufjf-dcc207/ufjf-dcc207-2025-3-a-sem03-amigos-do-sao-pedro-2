@@ -86,6 +86,9 @@ function App() {
     }
   }, [pokemonsState.pokemons, pokemonsState.loading, pokemonsState.error]);
 
+  const pokemons = pokemonsState.pokemons;
+  const equipePokemons = pokemons.filter((p: Pokemon) => p.selecionado);
+
   useEffect(() => {
     if (equipePokemons.length > 0 && lastTeamPokemonRef.current) {
       lastTeamPokemonRef.current.scrollIntoView({
@@ -130,8 +133,6 @@ function App() {
     return <ErrorDisplay message={pokemonsState.error} onRetry={handleRetry} />;
   }
 
-  const pokemons = pokemonsState.pokemons;
-  const equipePokemons = pokemons.filter((p: Pokemon) => p.selecionado);
   const boxPokemons = pokemons.filter((p: Pokemon) => !p.selecionado);
 
   const boxPokemonsFiltrados = boxPokemons.filter((pokemon: Pokemon) => {
