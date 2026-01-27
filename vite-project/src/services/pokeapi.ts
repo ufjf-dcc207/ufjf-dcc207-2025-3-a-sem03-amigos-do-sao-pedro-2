@@ -2,7 +2,6 @@ import type { Pokemon, PokemonType, PokemonStat } from '../pokedexData';
 
 const BASE_URL = 'https://pokeapi.co/api/v2';
 
-// Mapear nomes da API (inglês) para português
 const typeMapping: Record<string, PokemonType> = {
   grass: 'Grama',
   poison: 'Venenoso',
@@ -31,7 +30,6 @@ const statMapping: Record<string, PokemonStat['nome']> = {
   'speed': 'SPEED',
 };
 
-// Tabela de vantagens de tipo (simplificada)
 const typeAdvantages: Record<PokemonType, PokemonType[]> = {
   'Água': ['Fogo', 'Terra', 'Pedra'],
   'Fogo': ['Grama', 'Inseto', 'Gelo'],
@@ -51,7 +49,6 @@ const typeAdvantages: Record<PokemonType, PokemonType[]> = {
   'Fantasma': ['Psíquico', 'Fantasma'],
 };
 
-// Tabela de fraquezas de tipo (simplificada)
 const typeWeaknesses: Record<PokemonType, PokemonType[]> = {
   'Água': ['Elétrico', 'Grama'],
   'Fogo': ['Água', 'Terra', 'Pedra'],
@@ -71,11 +68,6 @@ const typeWeaknesses: Record<PokemonType, PokemonType[]> = {
   'Fantasma': ['Fantasma'],
 };
 
-/**
- * Busca detalhes de um Pokémon específico da PokéAPI
- * @param idOrName - ID numérico ou nome do Pokémon
- * @returns Promise com os dados do Pokémon formatados
- */
 export async function fetchPokemonDetails(idOrName: string | number): Promise<Pokemon> {
   const response = await fetch(`${BASE_URL}/pokemon/${idOrName}`);
   
@@ -85,7 +77,6 @@ export async function fetchPokemonDetails(idOrName: string | number): Promise<Po
   
   const data = await response.json();
   
-  // Transformar dados da API para nosso formato
   const tipos: PokemonType[] = data.types.map((t: any) => 
     typeMapping[t.type.name] || 'Normal'
   );
@@ -95,11 +86,9 @@ export async function fetchPokemonDetails(idOrName: string | number): Promise<Po
     valor: s.base_stat,
   }));
 
-  // Calcular vantagens e fraquezas baseado nos tipos
   const vantagens = Array.from(new Set(tipos.flatMap(t => typeAdvantages[t] || [])));
   const fraquezas = Array.from(new Set(tipos.flatMap(t => typeWeaknesses[t] || [])));
 
-  // Usar sprite animado se disponível, caso contrário usar padrão
   const imagemUrl = 
     data.sprites.versions?.['generation-v']?.['black-white']?.animated?.front_default ||
     data.sprites.front_default ||
@@ -107,8 +96,8 @@ export async function fetchPokemonDetails(idOrName: string | number): Promise<Po
 
   return {
     id: data.id,
-    instanceId: data.id, // Por enquanto, usar mesmo ID
-    nome: data.name.charAt(0).toUpperCase() + data.name.slice(1), // Capitalizar primeira letra
+    instanceId: data.id,
+    nome: data.name.charAt(0).toUpperCase() + data.name.slice(1),
     numero: `#${String(data.id).padStart(3, '0')}`,
     imagemUrl,
     tipos,
@@ -119,23 +108,13 @@ export async function fetchPokemonDetails(idOrName: string | number): Promise<Po
   };
 }
 
-/**
- * Busca múltiplos Pokémons em paralelo
- * @param ids - Array de IDs dos Pokémons
- * @returns Promise com array de Pokémons
- */
+
 export async function fetchMultiplePokemons(ids: number[]): Promise<Pokemon[]> {
   const promises = ids.map(id => fetchPokemonDetails(id));
   return Promise.all(promises);
 }
 
-/**
- * Busca uma lista de Pokémons com limit e offset
- * @param limit - Quantidade de Pokémons a buscar (padrão: 30)
- * @param offset - Offset inicial (padrão: 0)
- * @returns Promise com array de Pokémons
- */
-export async function fetchPokemons(limit: number = 30, offset: number = 0): Promise<Pokemon[]> {
+export async function fetchPokemons(limit: number = 151, offset: number = 0): Promise<Pokemon[]> {
   // Gerar IDs baseados no offset e limit
   const ids = Array.from({ length: limit }, (_, i) => offset + i + 1);
   return fetchMultiplePokemons(ids);

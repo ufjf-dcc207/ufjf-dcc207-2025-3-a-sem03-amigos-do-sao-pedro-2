@@ -30,20 +30,16 @@ function App() {
   // useEffect para carregar Pokémons da API ao montar o componente
   useEffect(() => {
     async function loadPokemonsFromAPI() {
-      // Iniciar loading
       pokemonsDispatch({ type: 'SET_LOADING', payload: true });
 
       try {
-        // Buscar primeiros 30 Pokémons da PokéAPI
-        const pokemonsData = await fetchPokemons(30, 0);
+        const pokemonsData = await fetchPokemons(151, 0);
         
-        // Sucesso - carregar dados
         pokemonsDispatch({ 
           type: 'LOAD_POKEMONS_SUCCESS', 
           payload: pokemonsData 
         });
       } catch (error) {
-        // Erro - exibir mensagem
         const errorMessage = error instanceof Error 
           ? error.message 
           : 'Erro desconhecido ao carregar Pokémons';
@@ -56,9 +52,8 @@ function App() {
     }
 
     loadPokemonsFromAPI();
-  }, []); // Array vazio = executa apenas ao montar
+  }, []); 
 
-  // Função para tentar carregar novamente após erro
   function handleRetry() {
     pokemonsDispatch({ type: 'SET_ERROR', payload: null });
     
@@ -86,17 +81,14 @@ function App() {
     retry();
   }
 
-  // Exibir Loading enquanto carrega
   if (pokemonsState.loading) {
     return <Loading message="Carregando Pokémons da PokéAPI..." />;
   }
 
-  // Exibir Error se houver erro
   if (pokemonsState.error) {
     return <ErrorDisplay message={pokemonsState.error} onRetry={handleRetry} />;
   }
 
-  // Derivar valores do estado
   const pokemons = pokemonsState.pokemons;
   const equipePokemons = pokemons.filter((p: Pokemon) => p.selecionado);
   const boxPokemons = pokemons.filter((p: Pokemon) => !p.selecionado);
