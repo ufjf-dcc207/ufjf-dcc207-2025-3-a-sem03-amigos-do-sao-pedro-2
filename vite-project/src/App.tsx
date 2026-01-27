@@ -30,6 +30,8 @@ function App() {
   const renderCount = useRef(0);
   renderCount.current += 1;
 
+  const lastTeamPokemonRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const STORAGE_KEY = 'pokedex-pokemons';
     const savedPokemons = localStorage.getItem(STORAGE_KEY);
@@ -83,6 +85,15 @@ function App() {
       }
     }
   }, [pokemonsState.pokemons, pokemonsState.loading, pokemonsState.error]);
+
+  useEffect(() => {
+    if (equipePokemons.length > 0 && lastTeamPokemonRef.current) {
+      lastTeamPokemonRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest'
+      });
+    }
+  }, [equipePokemons.length]);
 
   function handleRetry() {
     pokemonsDispatch({ type: 'SET_ERROR', payload: null });
@@ -243,12 +254,15 @@ function App() {
       >
         {Array.from({ length: 6 }).map((_, index) => {
           const pokemon = equipePokemons[index];
+          const isLast = index === equipePokemons.length - 1;
 
           return pokemon ? (
-            <TeamPokemonCard
+            <div
               key={pokemon.instanceId}
-              {...pokemon}
-            />
+              ref={isLast ? lastTeamPokemonRef : null}
+            >
+              <TeamPokemonCard {...pokemon} />
+            </div>
           ) : (
             <div key={`empty-${index}`} className="empty-slot" />
           );
