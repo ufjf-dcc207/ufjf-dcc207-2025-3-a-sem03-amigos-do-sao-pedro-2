@@ -27,46 +27,41 @@ function App() {
     initialPokemonsState
   );
 
-  // useEffect para carregar Pokémons do localStorage ou da API ao montar o componente
   useEffect(() => {
     const STORAGE_KEY = 'pokedex-pokemons';
-    
-    // Tentar carregar do localStorage primeiro
     const savedPokemons = localStorage.getItem(STORAGE_KEY);
-    
+
     if (savedPokemons) {
       try {
         const parsedPokemons = JSON.parse(savedPokemons);
-        pokemonsDispatch({ 
-          type: 'LOAD_POKEMONS_SUCCESS', 
-          payload: parsedPokemons 
+        pokemonsDispatch({
+          type: 'LOAD_POKEMONS_SUCCESS',
+          payload: parsedPokemons
         });
-        return; // Se carregou do localStorage, não busca da API
+        return;
       } catch (error) {
         console.error('Erro ao carregar do localStorage:', error);
-        // Se falhar, continua para carregar da API
       }
     }
 
-    // Se não há dados salvos, carrega da API
     async function loadPokemonsFromAPI() {
       pokemonsDispatch({ type: 'SET_LOADING', payload: true });
 
       try {
         const pokemonsData = await fetchPokemons(151, 0);
-        
-        pokemonsDispatch({ 
-          type: 'LOAD_POKEMONS_SUCCESS', 
-          payload: pokemonsData 
+
+        pokemonsDispatch({
+          type: 'LOAD_POKEMONS_SUCCESS',
+          payload: pokemonsData
         });
       } catch (error) {
-        const errorMessage = error instanceof Error 
-          ? error.message 
+        const errorMessage = error instanceof Error
+          ? error.message
           : 'Erro desconhecido ao carregar Pokémons';
-        
-        pokemonsDispatch({ 
-          type: 'LOAD_POKEMONS_ERROR', 
-          payload: errorMessage 
+
+        pokemonsDispatch({
+          type: 'LOAD_POKEMONS_ERROR',
+          payload: errorMessage
         });
       }
     }
@@ -74,11 +69,9 @@ function App() {
     loadPokemonsFromAPI();
   }, []);
 
-  // useEffect para salvar Pokémons no localStorage quando mudarem
   useEffect(() => {
     const STORAGE_KEY = 'pokedex-pokemons';
-    
-    // Só salva se não está carregando e não há erro
+
     if (!pokemonsState.loading && !pokemonsState.error && pokemonsState.pokemons.length > 0) {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(pokemonsState.pokemons));
@@ -86,32 +79,32 @@ function App() {
         console.error('Erro ao salvar no localStorage:', error);
       }
     }
-  }, [pokemonsState.pokemons, pokemonsState.loading, pokemonsState.error]); 
+  }, [pokemonsState.pokemons, pokemonsState.loading, pokemonsState.error]);
 
   function handleRetry() {
     pokemonsDispatch({ type: 'SET_ERROR', payload: null });
-    
+
     async function retry() {
       pokemonsDispatch({ type: 'SET_LOADING', payload: true });
-      
+
       try {
         const pokemonsData = await fetchPokemons(30, 0);
-        pokemonsDispatch({ 
-          type: 'LOAD_POKEMONS_SUCCESS', 
-          payload: pokemonsData 
+        pokemonsDispatch({
+          type: 'LOAD_POKEMONS_SUCCESS',
+          payload: pokemonsData
         });
       } catch (error) {
-        const errorMessage = error instanceof Error 
-          ? error.message 
+        const errorMessage = error instanceof Error
+          ? error.message
           : 'Erro desconhecido ao carregar Pokémons';
-        
-        pokemonsDispatch({ 
-          type: 'LOAD_POKEMONS_ERROR', 
-          payload: errorMessage 
+
+        pokemonsDispatch({
+          type: 'LOAD_POKEMONS_ERROR',
+          payload: errorMessage
         });
       }
     }
-    
+
     retry();
   }
 
@@ -211,10 +204,10 @@ function App() {
         onMoverPokemon={moverPokemon}
       >
         <PCFilters
-  filtersState={filtersState}
-  dispatch={filtersDispatch}
-  limparFiltros={limparFiltros}
-/>
+          filtersState={filtersState}
+          dispatch={filtersDispatch}
+          limparFiltros={limparFiltros}
+        />
 
 
         {boxPokemonsFiltrados.map((pokemon: Pokemon) => (
