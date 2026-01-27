@@ -1,15 +1,20 @@
-import { useReducer } from 'react';
+import { useReducer, useEffect } from 'react';
 import './App.css';
 
-import { todosPokemons, type Pokemon } from './pokedexData';
+import type { Pokemon } from './pokedexData';
 
 import { DashboardColumn } from './components/DashboardColumn';
 import { TeamPokemonCard } from './components/TeamPokemonCard';
 import { PCPokemonIcon } from './components/PCPokemonIcon';
 import { PCFilters } from './components/PCFilters';
+import { Loading } from './components/Loading';
+import { ErrorDisplay } from './components/ErrorDisplay';
 
 import { filtersReducer, initialFiltersState } from './reducers/reducerFilters';
 import { pokemonsReducer } from './reducers/reducerPokemons';
+import { initialPokemonsState } from './reducers/reducerTypes';
+
+import { fetchPokemons } from './services/pokeapi';
 
 function App() {
   const [filtersState, filtersDispatch] = useReducer(
@@ -17,11 +22,82 @@ function App() {
     initialFiltersState
   );
 
-  const [pokemons, pokemonsDispatch] = useReducer(
+  const [pokemonsState, pokemonsDispatch] = useReducer(
     pokemonsReducer,
-    todosPokemons
+    initialPokemonsState
   );
 
+  // useEffect para carregar Pokémons da API ao montar o componente
+  useEffect(() => {
+    async function loadPokemonsFromAPI() {
+      // Iniciar loading
+      pokemonsDispatch({ type: 'SET_LOADING', payload: true });
+
+      try {
+        // Buscar primeiros 30 Pokémons da PokéAPI
+        const pokemonsData = await fetchPokemons(30, 0);
+        
+        // Sucesso - carregar dados
+        pokemonsDispatch({ 
+          type: 'LOAD_POKEMONS_SUCCESS', 
+          payload: pokemonsData 
+        });
+      } catch (error) {
+        // Erro - exibir mensagem
+        const errorMessage = error instanceof Error 
+          ? error.message 
+          : 'Erro desconhecido ao carregar Pokémons';
+        
+        pokemonsDispatch({ 
+          type: 'LOAD_POKEMONS_ERROR', 
+          payload: errorMessage 
+        });
+      }
+    }
+
+    loadPokemonsFromAPI();
+  }, []); // Array vazio = executa apenas ao montar
+
+  // Função para tentar carregar novamente após erro
+  function handleRetry() {
+    pokemonsDispatch({ type: 'SET_ERROR', payload: null });
+    
+    async function retry() {
+      pokemonsDispatch({ type: 'SET_LOADING', payload: true });
+      
+      try {
+        const pokemonsData = await fetchPokemons(30, 0);
+        pokemonsDispatch({ 
+          type: 'LOAD_POKEMONS_SUCCESS', 
+          payload: pokemonsData 
+        });
+      } catch (error) {
+        const errorMessage = error instanceof Error 
+          ? error.message 
+          : 'Erro desconhecido ao carregar Pokémons';
+        
+        pokemonsDispatch({ 
+          type: 'LOAD_POKEMONS_ERROR', 
+          payload: errorMessage 
+        });
+      }
+    }
+    
+    retry();
+  }
+
+  // Exibir Loading enquanto carrega
+  if (pokemonsState.loading) {
+    return <Loading message="Carregando Pokémons da PokéAPI..." />;
+  }
+
+  // Exibir Error se houver erro
+  if (pokemonsState.error) {
+    return <ErrorDisplay message={pokemonsState.error} onRetry={handleRetry} />;
+  }
+
+  // Derivar valores do estado
+  const pokemons = pokemonsState.pokemons;
   const equipePokemons = pokemons.filter((p: Pokemon) => p.selecionado);
   const boxPokemons = pokemons.filter((p: Pokemon) => !p.selecionado);
 
