@@ -1,4 +1,4 @@
-import { useReducer, useEffect } from 'react';
+import { useReducer, useEffect, useRef } from 'react';
 import './App.css';
 
 import type { Pokemon } from './pokedexData';
@@ -26,6 +26,9 @@ function App() {
     pokemonsReducer,
     initialPokemonsState
   );
+
+  const renderCount = useRef(0);
+  renderCount.current += 1;
 
   useEffect(() => {
     const STORAGE_KEY = 'pokedex-pokemons';
@@ -198,6 +201,19 @@ function App() {
 
   return (
     <div className="dashboard-layout">
+      <div style={{
+        position: 'fixed',
+        top: '10px',
+        right: '10px',
+        background: 'rgba(0, 0, 0, 0.7)',
+        color: 'white',
+        padding: '8px 12px',
+        borderRadius: '4px',
+        fontSize: '12px',
+        zIndex: 9999
+      }}>
+        Renders: {renderCount.current}
+      </div>
       <DashboardColumn
         titulo="PC (Box 1)"
         gridType="pc"
