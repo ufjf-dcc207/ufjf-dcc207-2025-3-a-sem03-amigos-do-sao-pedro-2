@@ -1,3 +1,4 @@
+import { useRef, useEffect } from 'react';
 import type { PokemonType } from '../pokedexData';
 import type { FiltersState, FiltersAction } from '../reducers/reducerTypes';
 import './PCFilters.css';
@@ -13,6 +14,11 @@ export function PCFilters({
   dispatch,
   limparFiltros
 }: PCFiltersProps) {
+  const inputBuscaRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    inputBuscaRef.current?.focus();
+  }, []);
 
   const tiposDisponiveis: PokemonType[] = [
     'Grama', 'Venenoso', 'Fogo', 'Água', 'Elétrico', 'Inseto',
@@ -29,6 +35,7 @@ export function PCFilters({
         <div className="filter-group">
           <label htmlFor="filter-busca">Buscar:</label>
           <input
+            ref={inputBuscaRef}
             id="filter-busca"
             type="text"
             placeholder="Nome ou número..."
