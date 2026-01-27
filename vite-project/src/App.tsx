@@ -27,8 +27,28 @@ function App() {
     initialPokemonsState
   );
 
-  // useEffect para carregar Pokémons da API ao montar o componente
+  // useEffect para carregar Pokémons do localStorage ou da API ao montar o componente
   useEffect(() => {
+    const STORAGE_KEY = 'pokedex-pokemons';
+    
+    // Tentar carregar do localStorage primeiro
+    const savedPokemons = localStorage.getItem(STORAGE_KEY);
+    
+    if (savedPokemons) {
+      try {
+        const parsedPokemons = JSON.parse(savedPokemons);
+        pokemonsDispatch({ 
+          type: 'LOAD_POKEMONS_SUCCESS', 
+          payload: parsedPokemons 
+        });
+        return; // Se carregou do localStorage, não busca da API
+      } catch (error) {
+        console.error('Erro ao carregar do localStorage:', error);
+        // Se falhar, continua para carregar da API
+      }
+    }
+
+    // Se não há dados salvos, carrega da API
     async function loadPokemonsFromAPI() {
       pokemonsDispatch({ type: 'SET_LOADING', payload: true });
 
@@ -52,7 +72,21 @@ function App() {
     }
 
     loadPokemonsFromAPI();
-  }, []); 
+  }, []);
+
+  // useEffect para salvar Pokémons no localStorage quando mudarem
+  useEffect(() => {
+    const STORAGE_KEY = 'pokedex-pokemons';
+    
+    // Só salva se não está carregando e não há erro
+    if (!pokemonsState.loading && !pokemonsState.error && pokemonsState.pokemons.length > 0) {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(pokemonsState.pokemons));
+      } catch (error) {
+        console.error('Erro ao salvar no localStorage:', error);
+      }
+    }
+  }, [pokemonsState.pokemons, pokemonsState.loading, pokemonsState.error]); 
 
   function handleRetry() {
     pokemonsDispatch({ type: 'SET_ERROR', payload: null });
